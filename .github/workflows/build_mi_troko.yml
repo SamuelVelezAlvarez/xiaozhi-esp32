@@ -16,6 +16,7 @@ jobs:
 
       - name: Configurar y Compilar ESP32-S3
         run: |
+          . $IDF_PATH/export.sh
           idf.py set-target esp32s3
           cat << 'EOF' >> sdkconfig.defaults
           CONFIG_IDF_TARGET="esp32s3"
@@ -25,14 +26,19 @@ jobs:
           CONFIG_BOARD_TYPE_BREAD_COMPACT_WIFI_LCD=y
           CONFIG_LCD_ST7735_128X160=y
           CONFIG_LANGUAGE_ES_ES=y
+          CONFIG_USE_CUSTOM_WAKE_WORD=y
+          CONFIG_CUSTOM_WAKE_WORD="ga el"
+          CONFIG_CUSTOM_WAKE_WORD_DISPLAY="Gael"
+          CONFIG_CUSTOM_WAKE_WORD_THRESHOLD=28
+          CONFIG_WAKE_WORD_DETECTION_IN_LISTENING=n
           EOF
           rm -f sdkconfig
           idf.py build
           cd build
-          esptool.py --chip esp32s3 merge_bin -o firmware_128x160.bin @flash_args
+          esptool.py --chip esp32s3 merge_bin -o firmware_gael_128x160.bin @flash_args
 
       - name: Subir archivo .bin
         uses: actions/upload-artifact@v4
         with:
-          name: firmware-128x160
-          path: build/firmware_128x160.bin
+          name: firmware-gael-128x160
+          path: build/firmware_gael_128x160.bin
