@@ -7,7 +7,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: espressif/idf:latest
+      image: espressif/idf:v6.0.1
     steps:
       - name: Descargar codigo
         uses: actions/checkout@v4
@@ -17,8 +17,7 @@ jobs:
       - name: Configurar y Compilar ESP32-S3
         run: |
           . $IDF_PATH/export.sh
-          idf.py set-target esp32s3
-          cat << 'EOF' >> sdkconfig.defaults
+          cat << 'EOF' > sdkconfig.defaults
           CONFIG_IDF_TARGET="esp32s3"
           CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y
           CONFIG_SPIRAM=y
@@ -32,8 +31,8 @@ jobs:
           CONFIG_CUSTOM_WAKE_WORD_THRESHOLD=28
           CONFIG_WAKE_WORD_DETECTION_IN_LISTENING=n
           EOF
-          rm -f sdkconfig
-          idf.py build
+          idf.py set-target esp32s3 || (cat build/log/idf_py_stderr_output_* && exit 1)
+          idf.py build || (cat build/log/idf_py_stderr_output_* && exit 1)
           cd build
           esptool.py --chip esp32s3 merge_bin -o firmware_gael_128x160.bin @flash_args
 
