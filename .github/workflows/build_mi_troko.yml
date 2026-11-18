@@ -18,15 +18,17 @@ jobs:
         shell: bash
         run: |
           source "$IDF_PATH/export.sh"
-          cat << 'EOF' > sdkconfig.defaults
-          CONFIG_IDF_TARGET="esp32s3"
-          CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y
-          CONFIG_SPIRAM=y
-          CONFIG_SPIRAM_MODE_OCT=y
+          cat << 'EOF' >> sdkconfig.defaults.esp32s3
+          CONFIG_COMPILER_OPTIMIZATION_SIZE=y
           CONFIG_BOARD_TYPE_BREAD_COMPACT_WIFI_LCD=y
+          # CONFIG_BOARD_TYPE_BREAD_COMPACT_WIFI is not set
           CONFIG_LCD_ST7735_128X160=y
+          # CONFIG_LCD_ST7789_240X320 is not set
           CONFIG_LANGUAGE_ES_ES=y
+          # CONFIG_LANGUAGE_EN_US is not set
           CONFIG_USE_CUSTOM_WAKE_WORD=y
+          # CONFIG_USE_AFE_WAKE_WORD is not set
+          # CONFIG_WAKE_WORD_DISABLED is not set
           CONFIG_CUSTOM_WAKE_WORD="ga el"
           CONFIG_CUSTOM_WAKE_WORD_DISPLAY="Gael"
           CONFIG_CUSTOM_WAKE_WORD_THRESHOLD=28
