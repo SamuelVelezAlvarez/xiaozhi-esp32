@@ -281,6 +281,7 @@ void Application::Run() {
 
         if (bits & MAIN_EVENT_VAD_CHANGE) {
             if (GetDeviceState() == kDeviceStateListening) {
+                clock_ticks_ = 0;
                 auto led = Board::GetInstance().GetLed();
                 led->OnStateChanged();
             }
@@ -299,6 +300,14 @@ void Application::Run() {
             clock_ticks_++;
             auto display = Board::GetInstance().GetDisplay();
             display->UpdateStatusBar();
+
+            if (GetDeviceState() == kDeviceStateListening && clock_ticks_ >= 5) {
+                ESP_LOGI(TAG, "Silencio de 5s alcanzado, volviendo a espera de wake word");
+                if (protocol_ && protocol_->IsAudioChannelOpened()) {
+                    protocol_->CloseAudioChannel();
+                }
+                SetDeviceState(kDeviceStateIdle);
+            }
 
             // Print debug info every 10 seconds
             if (clock_ticks_ % 10 == 0) {
