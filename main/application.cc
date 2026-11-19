@@ -281,7 +281,6 @@ void Application::Run() {
 
         if (bits & MAIN_EVENT_VAD_CHANGE) {
             if (GetDeviceState() == kDeviceStateListening) {
-                clock_ticks_ = 0;
                 auto led = Board::GetInstance().GetLed();
                 led->OnStateChanged();
             }
@@ -709,6 +708,7 @@ void Application::InitializeProtocol() {
                     glyphs.clear();
                 }
                 ESP_LOGI(TAG, ">> %s", text->valuestring);
+                clock_ticks_ = 0;
                 Schedule([display, message = std::string(text->valuestring),
                           glyphs = std::move(glyphs), bpp]() {
                     display->AddTextGlyphs(glyphs, bpp);
