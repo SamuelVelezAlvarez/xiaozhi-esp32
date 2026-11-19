@@ -708,7 +708,9 @@ void Application::InitializeProtocol() {
                     glyphs.clear();
                 }
                 ESP_LOGI(TAG, ">> %s", text->valuestring);
-                clock_ticks_ = 0;
+                if (text->valuestring[0] != '\0') {
+                    clock_ticks_ = 0;
+                }
                 Schedule([display, message = std::string(text->valuestring),
                           glyphs = std::move(glyphs), bpp]() {
                     display->AddTextGlyphs(glyphs, bpp);
