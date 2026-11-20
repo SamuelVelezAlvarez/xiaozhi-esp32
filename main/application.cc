@@ -300,8 +300,8 @@ void Application::Run() {
             auto display = Board::GetInstance().GetDisplay();
             display->UpdateStatusBar();
 
-            if (GetDeviceState() == kDeviceStateListening && clock_ticks_ >= 5) {
-                ESP_LOGI(TAG, "Silencio de 5s alcanzado, volviendo a espera de wake word");
+            if (GetDeviceState() == kDeviceStateListening && clock_ticks_ >= 6) {
+                ESP_LOGI(TAG, "Silencio de 6s alcanzado, volviendo a espera de wake word");
                 if (protocol_ && protocol_->IsAudioChannelOpened()) {
                     protocol_->CloseAudioChannel();
                 }
